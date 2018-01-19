@@ -1,4 +1,4 @@
-# AzureDataLakeStore-OMS-Monitoring-template
+# Azure Data Lake Store Monitoring Overiew
 # Azure Data Lake Store Activity Logs
 Azure Activity logs is available on subscription level. This includes a range of data from Azure Resource Manager operational data to updates on Service Health events. Activity Logs provide data about the operations on a resource. 
 Activity Logs can be observed from DLS resource overview pane.
@@ -18,7 +18,7 @@ Audit Log : 180 Days.
 Requests : 30 Days.
 All Metrics : 30 Days.
 #Log Analysis
-OMS Log analysis process :
+Example OMS Log analysis query string :
 Data Type	
 All data collected for Data Lake Store
 	search *
@@ -51,7 +51,7 @@ All Metrics collected for all Data Lake Store	search *
 | where ( Type == "AzureMetrics" ) | summarize AggregatedValue = count() by MetricName
 	
 	
-6.5	OMS Custom Solution	
+# OMS Custom Solution template	
 See .omsview for custom solution developed for Data lake Store monitoring.
 Solution should be Viewed as below:
 Overview Tile and Dash Board	View

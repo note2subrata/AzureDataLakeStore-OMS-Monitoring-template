@@ -1,14 +1,13 @@
 # Azure Data Lake Store Monitoring Overiew
 # Azure Data Lake Store Activity Logs
 Azure Activity logs is available on subscription level. This includes a range of data from Azure Resource Manager operational data to updates on Service Health events. Activity Logs provide data about the operations on a resource. 
-Activity Logs can be observed from DLS resource overview pane.
-Client IP and username information collected from activity logs json
+Activity Logs can be reviewed from DLS resource overview pane. Client IP and username information can be collected from activity logs json properties.
 # Diagnostics Logs Using OMS Workspace and Storage Account
 Diagnostics logs can be configured using OMS Log Analytics , Event Hub or Azure Storage Account.
 Process to enable Diagnostics Logs:
-1	Create an OMS Log Analytics account if it’s a new requirement. Raise a request with Cloud Central operation with Charge code approval for creation of OMS workspace.
+1	Create an OMS Log Analytics account if it’s a new requirement. Else you mau use an existing workspace.
 2	When Log Analytics is available, configure diagnostics settings as below by selecting newly created workspace.
-3	Select “Archive to a Storage Account” and Keep the logs in Storage Account by selecting a storage account which has been created for same purpose.
+3	Select “Archive to a Storage Account” and Keep the logs in Storage Account by selecting a storage account created for same purpose.
 4	Click on Save.
 5	Finally changes will take effect on the Diagnostics settings.
 # Retention of Logs

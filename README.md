@@ -16,7 +16,8 @@ Storage Account retention period can be set n number of days:
 Audit Log : n Days.
 Requests : n Days.
 All Metrics : n Days.
-Any number of days set as "0" means data will be stored forever.
+Any number of days set as "0" means data will be stored forever in the storage account.
+https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-diagnostic-logs
 # OMS workspace Log Analysis
 Example OMS Log analysis query string :
 Data Type	
@@ -31,22 +32,22 @@ search *
 Type of Data sent to OMS	search *
 | search "*MICROSOFT.DATALAKESTORE*"
 | summarize by Type
-Number of Data Lake reporting to DataLake	search *
+	Number of Data Lake reporting to DataLake	search *
 | search "*MICROSOFT.DATALAKESTORE*"
 | where ( Type == "AzureDiagnostics" or Type == "AzureMetrics" )  
 |  summarize AggregatedValue = count() by Resource | count
-Search by Operation Type	search * | search "*MICROSOFT.DATALAKESTORE*" | where ( Type == "AzureDiagnostics" or Type == "AzureMetrics" )  |  where ( Category == "Audit" or Category == "Requests" ) | summarize AggregatedValue = count() by OperationName
-Success Operation Count	search * | search "*MICROSOFT.DATALAKESTORE*" | where ( Type == "AzureDiagnostics" or Type == "AzureMetrics" ) | where ( Category == "Audit" or Category == "Requests") | where ( ResultType == "Success" )  
+	Search by Operation Type	search * | search "*MICROSOFT.DATALAKESTORE*" | where ( Type == "AzureDiagnostics" or Type == "AzureMetrics" )  |  where ( Category == "Audit" or Category == "Requests" ) | summarize AggregatedValue = count() by OperationName
+	Success Operation Count	search * | search "*MICROSOFT.DATALAKESTORE*" | where ( Type == "AzureDiagnostics" or Type == "AzureMetrics" ) | where ( Category == "Audit" or Category == "Requests") | where ( ResultType == "Success" )  
 |  summarize AggregatedValue = count()
-Failure Operation Count	search * | search "*MICROSOFT.DATALAKESTORE*" | where ( Type == "AzureDiagnostics" or Type == "AzureMetrics" ) | where ( Category == "Audit" or Category == "Requests") | where ( ResultType == "Failure" ) 
+	Failure Operation Count	search * | search "*MICROSOFT.DATALAKESTORE*" | where ( Type == "AzureDiagnostics" or Type == "AzureMetrics" ) | where ( Category == "Audit" or Category == "Requests") | where ( ResultType == "Failure" ) 
 |  summarize AggregatedValue = count()
-Identity Users for last 24 Hours	search *  and TimeGenerated > ago(24h)| search "*MICROSOFT.DATALAKESTORE*" | where ( Type == "AzureDiagnostics") | summarize AggregatedValue = count() by identity_s
-Data Lake Metrics for Data Written	search *
+	Identity Users for last 24 Hours	search *  and TimeGenerated > ago(24h)| search "*MICROSOFT.DATALAKESTORE*" | where ( Type == "AzureDiagnostics") | summarize AggregatedValue = count() by identity_s
+	Data Lake Metrics for "Data Written"	search *
 | search "*MICROSOFT.DATALAKESTORE*"
 | where ( Type == "AzureMetrics" )
 | where ( MetricName == "DataWritten" )
 |  summarize AggregatedValue = count() by Resource
-All Metrics collected for all Data Lake Store	search *
+	All Metrics collected for all Data Lake Store	search *
 | search "*MICROSOFT.DATALAKESTORE*"
 | where ( Type == "AzureMetrics" ) | summarize AggregatedValue = count() by MetricName
 	

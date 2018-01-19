@@ -3,7 +3,7 @@
 Azure Activity logs is available on subscription level. This includes a range of data from Azure Resource Manager operational data to updates on Service Health events. Activity Logs provide data about the operations on a resource. 
 Activity Logs can be observed from DLS resource overview pane.
 Client IP and username information collected from activity logs json
-Diagnostics Logs Using OMS Workspace and Storage Account
+# Diagnostics Logs Using OMS Workspace and Storage Account
 Diagnostics logs can be configured using OMS Log Analytics , Event Hub or Azure Storage Account.
 Process to enable Diagnostics Logs:
 1	Create an OMS Log Analytics account if it’s a new requirement. Raise a request with Cloud Central operation with Charge code approval for creation of OMS workspace.
@@ -17,7 +17,7 @@ Storage Account retention period :
 Audit Log : 180 Days.
 Requests : 30 Days.
 All Metrics : 30 Days.
-#Log Analysis
+# OMS workspace Log Analysis
 Example OMS Log analysis query string :
 Data Type	
 All data collected for Data Lake Store

@@ -55,7 +55,7 @@ Type of Data sent to OMS	search *
 # OMS Custom Solution template	
 See .omsview for custom solution developed for Data lake Store monitoring.
 Solution should be Viewed as below:
-Overview Tile and Dash Board View
+Overview Tile and Dash Board View.
 Dashboard view gives presentation of DATA DISTRIBUTION BY DATA LAKE STORE, DISTRIBUTION BY OPERATION TYPE ,	 
 ACCOUNT AUDIT INFORMATION , DATA LAKE STORE METRICS and DISTRIBUTION OF DIAGNOSTIC LOGS BY METRICS	 
 	

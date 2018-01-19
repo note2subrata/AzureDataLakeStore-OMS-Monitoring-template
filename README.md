@@ -12,10 +12,11 @@ Process to enable Diagnostics Logs:
 5	Finally changes will take effect on the Diagnostics settings.
 # Retention of Logs
 We can configure retention of logs on only Storage account. Retention of logs in OMS Log Analytics depends on OMS log retention settings managed separately.
-Storage Account retention period :
-Audit Log : 180 Days.
-Requests : 30 Days.
-All Metrics : 30 Days.
+Storage Account retention period can be set n number of days:
+Audit Log : n Days.
+Requests : n Days.
+All Metrics : n Days.
+Any number of days set as "0" means data will be stored forever.
 # OMS workspace Log Analysis
 Example OMS Log analysis query string :
 Data Type	

@@ -1,0 +1,466 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "resourcegroup": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "subscriptionId": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "workspace": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "workspaceapiversion": {
+            "type": "string",
+            "defaultValue": ""
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "[parameters('workspaceapiversion')]",
+            "name": "[parameters('workspace')]",
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "location": "[parameters('location')]",
+            "id": "[Concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/', parameters('resourcegroup'), '/providers/Microsoft.OperationalInsights/workspaces/', parameters('workspace'))]",
+            "resources": [
+                {
+                    "apiVersion": "2015-11-01-preview",
+                    "name": "Data Lake Store Monitoring",
+                    "type": "views",
+                    "location": "[parameters('location')]",
+                    "id": "[Concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/', parameters('resourcegroup'), '/providers/Microsoft.OperationalInsights/workspaces/', parameters('workspace'),'/views/Cloud Central Data Lake Store Monitoring')]",
+                    "dependson": [
+                        "[Concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/', parameters('resourcegroup'), '/providers/Microsoft.OperationalInsights/workspaces/', parameters('workspace'))]"
+                    ],
+                    "properties": {
+                        "Id": "Data Lake Store Monitoring",
+                        "Name": "Data Lake Store Monitoring",
+                        "Author": "userid@xxxx.onmicrosoft.com",
+                        "Source": "Local",
+                        "Version": 2,
+                        "Dashboard": [
+                            {
+                                "Id": "NumberTileListBuilderBlade",
+                                "Type": "Blade",
+                                "Version": 0,
+                                "Configuration": {
+                                    "General": {
+                                        "title": "Distribution by Data Lake Store",
+                                        "newGroup": false,
+                                        "icon": "",
+                                        "useIcon": false
+                                    },
+                                    "Tile": {
+                                        "Legend": "Data Lake Store Sending Data",
+                                        "Query": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureDiagnostics\" or Type == \"AzureMetrics\" )   |  summarize AggregatedValue = count() by Resource | count",
+                                        "NavigationSelect": {}
+                                    },
+                                    "List": {
+                                        "Query": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureDiagnostics\" or Type == \"AzureMetrics\" )   |  summarize AggregatedValue = count() by Resource",
+                                        "HideGraph": false,
+                                        "enableSparklines": false,
+                                        "ColumnsTitle": {
+                                            "Name": "Data Lake Store Name",
+                                            "Value": "Count"
+                                        },
+                                        "Color": "#0072c6",
+                                        "thresholds": {
+                                            "isEnabled": false,
+                                            "values": [
+                                                {
+                                                    "name": "Normal",
+                                                    "threshold": "Default",
+                                                    "color": "#009e49",
+                                                    "isDefault": true
+                                                },
+                                                {
+                                                    "name": "Warning",
+                                                    "threshold": "60",
+                                                    "color": "#fcd116",
+                                                    "isDefault": false
+                                                },
+                                                {
+                                                    "name": "Error",
+                                                    "threshold": "90",
+                                                    "color": "#ba141a",
+                                                    "isDefault": false
+                                                }
+                                            ]
+                                        },
+                                        "NameDSVSeparator": "",
+                                        "NavigationQuery": "search {selected item} | sort by TimeGenerated desc",
+                                        "NavigationSelect": {
+                                            "NavigationQuery": "search {selected item} | sort by TimeGenerated desc"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "Id": "TwoTrendsAndListBuilderBlade",
+                                "Type": "Blade",
+                                "Version": 0,
+                                "Configuration": {
+                                    "General": {
+                                        "title": "Distribution by Operation Type",
+                                        "newGroup": false,
+                                        "icon": "",
+                                        "useIcon": true
+                                    },
+                                    "Trend1": {
+                                        "Legend": "Success",
+                                        "LegendColor": "#009e49",
+                                        "ChartQuery": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureDiagnostics\" or Type == \"AzureMetrics\" ) | where ( Category == \"Audit\" or Category == \"Requests\") | where ( ResultType == \"Success\" )",
+                                        "Calculation": {
+                                            "Operation": "Sum"
+                                        }
+                                    },
+                                    "Trend2": {
+                                        "Legend": "Failure",
+                                        "LegendColor": "#e81123",
+                                        "ChartQuery": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureDiagnostics\" or Type == \"AzureMetrics\" ) | where ( Category == \"Audit\" or Category == \"Requests\") | where ( ResultType == \"Failure\" ) ",
+                                        "Calculation": {
+                                            "Operation": "Sum"
+                                        }
+                                    },
+                                    "List": {
+                                        "Query": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureDiagnostics\" or Type == \"AzureMetrics\" )  |  where ( Category == \"Audit\" or Category == \"Requests\" ) | summarize AggregatedValue = count() by OperationName",
+                                        "HideGraph": false,
+                                        "enableSparklines": true,
+                                        "operation": "Summary",
+                                        "ColumnsTitle": {
+                                            "Name": "Operation Name",
+                                            "Value": "Count"
+                                        },
+                                        "Color": "#00188f",
+                                        "thresholds": {
+                                            "isEnabled": false,
+                                            "values": [
+                                                {
+                                                    "name": "Normal",
+                                                    "threshold": "Default",
+                                                    "color": "#009e49",
+                                                    "isDefault": true
+                                                },
+                                                {
+                                                    "name": "Warning",
+                                                    "threshold": "60",
+                                                    "color": "#fcd116",
+                                                    "isDefault": false
+                                                },
+                                                {
+                                                    "name": "Error",
+                                                    "threshold": "90",
+                                                    "color": "#ba141a",
+                                                    "isDefault": false
+                                                }
+                                            ]
+                                        },
+                                        "NameDSVSeparator": "",
+                                        "NavigationQuery": "search {selected item} | sort by TimeGenerated desc",
+                                        "NavigationSelect": {
+                                            "NavigationQuery": "search {selected item} | sort by TimeGenerated desc"
+                                        }
+                                    },
+                                    "Blade": {
+                                        "NavigationSelect": {}
+                                    }
+                                }
+                            },
+                            {
+                                "Id": "LineChartCalloutBuilderBlade",
+                                "Type": "Blade",
+                                "Version": 0,
+                                "Configuration": {
+                                    "General": {
+                                        "title": "User Audit Information ",
+                                        "newGroup": false,
+                                        "icon": "",
+                                        "useIcon": false
+                                    },
+                                    "Header": {
+                                        "Title": "Access Request per Data Lake Store",
+                                        "Subtitle": ""
+                                    },
+                                    "LineChart": {
+                                        "Query": "search *  and TimeGenerated > ago(24h)| search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureDiagnostics\") | summarize AggregatedValue = count() by Resource",
+                                        "Callout": {
+                                            "Title": "Last 24 hour Requests",
+                                            "Series": "",
+                                            "Operation": "Count"
+                                        },
+                                        "yAxis": {
+                                            "isLogarithmic": false,
+                                            "units": {
+                                                "baseUnitType": "",
+                                                "baseUnit": "",
+                                                "displayUnit": ""
+                                            },
+                                            "customLabel": ""
+                                        },
+                                        "NavigationSelect": {}
+                                    },
+                                    "List": {
+                                        "Query": "search *  and TimeGenerated > ago(24h)| search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureDiagnostics\") | summarize AggregatedValue = count() by identity_s ",
+                                        "HideGraph": false,
+                                        "enableSparklines": false,
+                                        "operation": "Summary",
+                                        "ColumnsTitle": {
+                                            "Name": "Type",
+                                            "Value": "Count"
+                                        },
+                                        "Color": "#0072c6",
+                                        "thresholds": {
+                                            "isEnabled": false,
+                                            "values": [
+                                                {
+                                                    "name": "Normal",
+                                                    "threshold": "Default",
+                                                    "color": "#009e49",
+                                                    "isDefault": true
+                                                },
+                                                {
+                                                    "name": "Warning",
+                                                    "threshold": "60",
+                                                    "color": "#fcd116",
+                                                    "isDefault": false
+                                                },
+                                                {
+                                                    "name": "Error",
+                                                    "threshold": "90",
+                                                    "color": "#ba141a",
+                                                    "isDefault": false
+                                                }
+                                            ]
+                                        },
+                                        "NameDSVSeparator": "",
+                                        "NavigationQuery": "search {selected item} | sort by TimeGenerated desc",
+                                        "NavigationSelect": {
+                                            "NavigationQuery": "search {selected item} | sort by TimeGenerated desc"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "Id": "LineChartCalloutStackedBuilderBlade",
+                                "Type": "Blade",
+                                "Version": 0,
+                                "Configuration": {
+                                    "General": {
+                                        "title": "Data Lake Store Metrics",
+                                        "newGroup": false
+                                    },
+                                    "charts": [
+                                        {
+                                            "Header": {
+                                                "Title": "Data Written",
+                                                "Subtitle": ""
+                                            },
+                                            "LineChart": {
+                                                "Query": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureMetrics\" ) | where ( MetricName == \"DataWritten\" ) |  summarize AggregatedValue = count() by Resource",
+                                                "yAxis": {
+                                                    "isLogarithmic": false,
+                                                    "units": {
+                                                        "baseUnitType": "",
+                                                        "baseUnit": "",
+                                                        "displayUnit": ""
+                                                    },
+                                                    "customLabel": ""
+                                                },
+                                                "NavigationSelect": {}
+                                            }
+                                        },
+                                        {
+                                            "Header": {
+                                                "Title": "Data Read",
+                                                "Subtitle": ""
+                                            },
+                                            "LineChart": {
+                                                "Query": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureMetrics\" ) | where ( MetricName == \"DataRead\" )   |  summarize AggregatedValue = count() by Resource",
+                                                "yAxis": {
+                                                    "isLogarithmic": false,
+                                                    "units": {
+                                                        "baseUnitType": "",
+                                                        "baseUnit": "",
+                                                        "displayUnit": ""
+                                                    },
+                                                    "customLabel": ""
+                                                },
+                                                "NavigationSelect": {}
+                                            }
+                                        },
+                                        {
+                                            "Header": {
+                                                "Title": "Read and Write Request",
+                                                "Subtitle": ""
+                                            },
+                                            "LineChart": {
+                                                "Query": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureMetrics\" ) | where ( MetricName == \"ReadRequests\" or MetricName == \"WriteRequests\" )   |  summarize AggregatedValue = count() by Resource,MetricName",
+                                                "yAxis": {
+                                                    "isLogarithmic": false,
+                                                    "units": {
+                                                        "baseUnitType": "",
+                                                        "baseUnit": "",
+                                                        "displayUnit": ""
+                                                    },
+                                                    "customLabel": ""
+                                                },
+                                                "NavigationSelect": {}
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "Id": "TwoTrendsAndListBuilderBlade",
+                                "Type": "Blade",
+                                "Version": 0,
+                                "Configuration": {
+                                    "General": {
+                                        "title": "Distribution by Metrics",
+                                        "newGroup": false,
+                                        "icon": "",
+                                        "useIcon": false
+                                    },
+                                    "Trend1": {
+                                        "Legend": "Collected Metrics",
+                                        "LegendColor": "#00188f",
+                                        "ChartQuery": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureMetrics\" ) | summarize AggregatedValue = count() by Resource",
+                                        "Calculation": {
+                                            "Operation": "Count"
+                                        }
+                                    },
+                                    "Trend2": {
+                                        "Legend": "All Events",
+                                        "LegendColor": "#0072c6",
+                                        "ChartQuery": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureMetrics\" ) | summarize AggregatedValue = count() by MetricName",
+                                        "Calculation": {
+                                            "Operation": "Sum"
+                                        }
+                                    },
+                                    "List": {
+                                        "Query": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureMetrics\" ) | where ( MetricName == \"WriteRequests\" or MetricName == \"DataRead\" or MetricName == \"ReadRequests\" or MetricName == \"DataWritten\" ) |  summarize AggregatedValue = count() by Resource, MetricName",
+                                        "HideGraph": false,
+                                        "enableSparklines": false,
+                                        "operation": "Summary",
+                                        "ColumnsTitle": {
+                                            "Name": "Data Lake Store",
+                                            "Value": "Count"
+                                        },
+                                        "Color": "#442359",
+                                        "thresholds": {
+                                            "isEnabled": false,
+                                            "values": [
+                                                {
+                                                    "name": "Normal",
+                                                    "threshold": "Default",
+                                                    "color": "#009e49",
+                                                    "isDefault": true
+                                                },
+                                                {
+                                                    "name": "Warning",
+                                                    "threshold": "60",
+                                                    "color": "#fcd116",
+                                                    "isDefault": false
+                                                },
+                                                {
+                                                    "name": "Error",
+                                                    "threshold": "90",
+                                                    "color": "#ba141a",
+                                                    "isDefault": false
+                                                }
+                                            ]
+                                        },
+                                        "NameDSVSeparator": "",
+                                        "NavigationQuery": "search {selected item} | sort by TimeGenerated desc",
+                                        "NavigationSelect": {
+                                            "NavigationQuery": "search {selected item} | sort by TimeGenerated desc"
+                                        }
+                                    },
+                                    "Blade": {
+                                        "NavigationSelect": {}
+                                    }
+                                }
+                            },
+                            {
+                                "Id": "NotableQueriesBuilderBlade",
+                                "Type": "Blade",
+                                "Version": 0,
+                                "Configuration": {
+                                    "General": {
+                                        "title": "List of queries",
+                                        "newGroup": false,
+                                        "preselectedFilters": "Type, Computer",
+                                        "renderMode": "grid"
+                                    },
+                                    "queries": [
+                                        {
+                                            "query": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureDiagnostics\" ) | where ( Category == \"Audit\" )",
+                                            "displayName": "All Audit Events Logged"
+                                        },
+                                        {
+                                            "query": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureDiagnostics\" ) | where ( Category == \"Requests\" )",
+                                            "displayName": "All Data Lake Store User Request Events"
+                                        },
+                                        {
+                                            "query": "search * | search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureDiagnostics\" or Type == \"AzureMetrics\" )  |  where ( Category == \"Audit\" or Category == \"Requests\" ) ",
+                                            "displayName": "All Operations performed in Data Lake Store"
+                                        },
+                                        {
+                                            "query": "search *  and TimeGenerated > ago(24h)| search \"*MICROSOFT.DATALAKESTORE*\" | where ( Type == \"AzureDiagnostics\") | summarize AggregatedValue = count() by identity_s ",
+                                            "displayName": "Access entries for last 24 hours"
+                                        }
+                                    ]
+                                }
+                            }
+                        ],
+                        "Filters": [],
+                        "OverviewTile": {
+                            "Id": "SingleQueryDonutBuilderTileV1",
+                            "Type": "OverviewTile",
+                            "Version": 2,
+                            "Configuration": {
+                                "Donut": {
+                                    "Query": "search * | summarize AggregatedValue = count() by Type  | order by AggregatedValue desc",
+                                    "CenterLegend": {
+                                        "Text": "Total",
+                                        "Operation": "Sum",
+                                        "ArcsToSelect": []
+                                    },
+                                    "Options": {
+                                        "colors": [
+                                            "#002050",
+                                            "#009e49",
+                                            "#00bcf2"
+                                        ],
+                                        "valueColorMapping": [],
+                                        "legend": true,
+                                        "skipLegendPositioning": true,
+                                        "center": true,
+                                        "unitType": "Count",
+                                        "fromUnit": "Ones"
+                                    },
+                                    "HideOtherLegend": true
+                                },
+                                "Advanced": {
+                                    "DataFlowVerification": {
+                                        "Enabled": false,
+                                        "Query": "search * | limit 1 | project TimeGenerated",
+                                        "Message": ""
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

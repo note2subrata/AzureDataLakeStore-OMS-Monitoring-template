@@ -1,6 +1,6 @@
 # Azure Data Lake Store Monitoring Overiew
 # Azure Data Lake Store Activity Logs
-Azure Activity logs is available on subscription level. This includes a range of data from Azure Resource Manager operational data to updates on Service Health events. Activity Logs provide data about the operations on a resource. 
+Azure Activity logs are available on subscription level. This includes a range of data from Azure Resource Manager operational data to updates on Service Health events. Activity Logs provide data about the operations on a resource. 
 Activity Logs can be reviewed from DLS resource overview pane. Client IP and username information can be collected from activity logs json properties.
 # Diagnostics Logs Using OMS Workspace and Storage Account
 Diagnostics logs can be configured using OMS Log Analytics , Event Hub or Azure Storage Account.
